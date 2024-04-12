@@ -51,6 +51,7 @@ PACKAGE_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.naver',
 ]
 
 PROJECT_APPS = [
@@ -146,6 +147,10 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# FOR SOCIAL LOGIN
+JWT_AUTH_COOKIE = 'sociallogin-auth'
+JWT_AUTH_REFRESH_COOKIE = 'sociallogin-refresh-token'
 
 REST_USE_JWT = True
 
