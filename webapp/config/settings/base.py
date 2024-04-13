@@ -51,7 +51,6 @@ PACKAGE_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.naver',
 ]
 
 PROJECT_APPS = [

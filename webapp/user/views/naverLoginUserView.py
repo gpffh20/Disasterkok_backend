@@ -16,7 +16,8 @@ def naverLogin(request):
     CLIENT_ID = os.environ.get("NAVER_CLIENT_ID")
     REDIRECT_URL = os.environ.get("NAVER_REDIRECT_URL")
     STATE = "RANDOM_STATE"
-    url = f"https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URL}&state={STATE}"
+    url = (f"https://nid.naver.com/oauth2.0/authorize"
+           f"?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URL}&state={STATE}")
     return redirect(url)
 
 
@@ -25,7 +26,6 @@ def naverLogin(request):
 def naverCallback(request):
     client_id = os.environ.get("NAVER_CLIENT_ID")
     client_secret = os.environ.get("NAVER_SECRET")
-    # state = "RANDOM_STATE"
     state = request.GET.get("state")
     code = request.GET.get("code")
 
@@ -59,6 +59,7 @@ def naverCallback(request):
         if 'response' in profile_json:
             naverId = profile_json["response"].get("id")
             username = profile_json["response"].get("nickname")
+            email = profile_json["response"].get("email")
 
             if naverId is not None:
                 if User.objects.filter(naverId=naverId).exists():
@@ -69,6 +70,7 @@ def naverCallback(request):
                             "id": user.id,
                             "naverId": user.naverId,
                             "username": user.username,
+                            'email': user.email,
                         },
                         "refresh": str(refresh),
                         "access": str(refresh.access_token),
@@ -76,7 +78,7 @@ def naverCallback(request):
                     return Response(data, status=status.HTTP_200_OK)
 
                 else:
-                    User(naverId=naverId, username=username).save()
+                    User(naverId=naverId, username=username, email=email).save()
                     user = User.objects.get(naverId=naverId)
                     refresh = RefreshToken.for_user(user)
                     data = {
