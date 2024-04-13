@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 
 from notification.models import Notification
 from region.models import Region
+from rest_framework_simplejwt.tokens import AccessToken
 
 
 class RegionDefaultAPIView(APIView):
@@ -10,8 +11,8 @@ class RegionDefaultAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         region_id = self.kwargs.get(self.lookup_url_kwarg)
-        user = request.user
-        notification = Notification.objects.get(user=user)
+        region = Region.objects.get(id=region_id)
+        notification = region.notification
         regions = Region.objects.filter(notification=notification)
         for region in regions:
             region.default = False
