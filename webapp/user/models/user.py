@@ -43,7 +43,7 @@ class User(AbstractUser, PermissionsMixin):
         blank=False,
     )
 
-    googleID = models.CharField(
+    googleId = models.CharField(
         verbose_name='구글 아이디',
         unique=True,
         max_length=225,
@@ -61,14 +61,6 @@ class User(AbstractUser, PermissionsMixin):
 
     naverId = models.CharField(
         verbose_name='네이버 아이디',
-        unique=True,
-        max_length=225,
-        null=True,
-        blank=True,
-    )
-
-    googleID = models.CharField(
-        verbose_name='구글 아이디',
         unique=True,
         max_length=225,
         null=True,
@@ -107,6 +99,8 @@ class User(AbstractUser, PermissionsMixin):
             return f"(카카오) {self.username}"
         elif self.naverId:
             return f"(네이버) {self.username}"
+        elif self.googleId:
+            return f"(구글) {self.username}"
         return f"(일반) {self.username}"
 
     # def has_perm(self, perm, obj=None):
