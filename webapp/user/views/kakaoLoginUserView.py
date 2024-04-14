@@ -57,6 +57,8 @@ def kakaoCallback(request):
 
         if kakaoId is not None:
             if User.objects.filter(kakaoId=kakaoId).exists():
+                # if User.objects.filter(email=email).exists():
+                #     return Response({"message": "이미 가입된 이메일 주소입니다."}, status=status.HTTP_400_BAD_REQUEST)
                 user = User.objects.get(kakaoId=kakaoId)
                 refresh = RefreshToken.for_user(user)
                 data = {
