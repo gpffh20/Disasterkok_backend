@@ -58,7 +58,7 @@ def naverCallback(request):
 
         if 'response' in profile_json:
             naverId = profile_json["response"].get("id")
-            username = profile_json["response"].get("nickname")
+            username = profile_json["response"].get("email")
             email = profile_json["response"].get("email")
 
             if naverId is not None:
