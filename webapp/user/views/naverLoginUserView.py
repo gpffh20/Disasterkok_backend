@@ -63,6 +63,11 @@ def naverCallback(request):
 
             if naverId is not None:
                 if User.objects.filter(naverId=naverId).exists():
+                    if User.objects.filter(email=email).exists():
+                        return Response({"message": "이미 가입된 이메일 주소입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+                    User(naverId=naverId, username=username, email=email).save()
+
                     user = User.objects.get(naverId=naverId)
                     refresh = RefreshToken.for_user(user)
                     data = {
