@@ -29,8 +29,8 @@ class RegisterAPIView(APIView):
                 status=status.HTTP_200_OK,
             )
 
-            res.set_cookie("access", access_token, httponly=True)
-            res.set_cookie("refresh", refresh_token, httponly=True)
+            res.set_cookie("access", access_token, httponly=True, secure=True, samesite='Lax')
+            res.set_cookie("refresh", refresh_token, httponly=True, secure=True, samesite='Lax')
 
             return res
 

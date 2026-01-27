@@ -24,7 +24,15 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
+
+# Cookie security settings
+SESSION_COOKIE_SECURE = os.environ.get("DEBUG", "False").lower() != "true"
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = os.environ.get("DEBUG", "False").lower() != "true"
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 # Application definition
 
@@ -51,6 +59,7 @@ PACKAGE_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'channels',
 ]
 
 PROJECT_APPS = [
@@ -93,6 +102,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
+
+# Channel layers (Redis)
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [(os.environ.get('REDIS_HOST', 'localhost'), int(os.environ.get('REDIS_PORT', 6379)))],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

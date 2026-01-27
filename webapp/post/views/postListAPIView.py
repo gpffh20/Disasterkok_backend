@@ -28,7 +28,9 @@ class CustomSearchFilter(BaseFilterBackend):
         return queryset
 
 class PostListAPIView(ListAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.select_related('user').prefetch_related(
+        'image', 'posttag_set__tag'
+    ).order_by('-created_at')
     serializer_class = PostSerializer
     pagination_class = pagination.PageNumberPagination
     filter_backends = [CustomSearchFilter]

@@ -7,7 +7,7 @@ from region.models import Region
 class RegionAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'notification',
+        'notification_setting',
         'default',
         'onOff',
         'name',

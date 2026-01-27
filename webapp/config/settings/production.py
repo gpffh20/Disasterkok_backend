@@ -1,7 +1,7 @@
 from .base import *  # noqa pylint: disable=wildcard-import, unused-wildcard-import
 
 DEBUG = False
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 
 DATABASES = (
     {

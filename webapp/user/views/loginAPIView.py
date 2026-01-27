@@ -21,7 +21,7 @@ class LoginAPIView(APIView):
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
-            regions = Region.objects.filter(notification__user=request.user.id)
+            regions = Region.objects.filter(notification_setting__user=user.id)
             if regions:
                 exist = True
             else:
@@ -40,8 +40,8 @@ class LoginAPIView(APIView):
                 status=status.HTTP_200_OK,
             )
             # jwt 토큰 -> 쿠키에 저장
-            res.set_cookie("access", access_token, httponly=True)
-            res.set_cookie("refresh", refresh_token, httponly=True)
+            res.set_cookie("access", access_token, httponly=True, secure=True, samesite='Lax')
+            res.set_cookie("refresh", refresh_token, httponly=True, secure=True, samesite='Lax')
             return res
         else:
             return Response({"message": "login failed"}, status=status.HTTP_401_UNAUTHORIZED)
