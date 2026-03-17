@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - gunicorn
+      - daphne
+    restart: always
+
+  gunicorn:
+    image: ${ECR_REGISTRY}/disasterkok-backend:latest
+    command: gunicorn --bind 0.0.0.0:8000 --workers 5 config.wsgi:application
+    env_file: .env.production
+    restart: always
+
+  daphne:
+    image: ${ECR_REGISTRY}/disasterkok-backend:latest
+    command: daphne -b 0.0.0.0 -p 8001 config.asgi:application
+    env_file: .env.production
+    restart: always

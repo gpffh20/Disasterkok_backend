@@ -11,13 +11,13 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 def get_user_from_token(token_string):
     """Validate JWT token and return user."""
     from user.models import User
-
     try:
         access_token = AccessToken(token_string)
         user_id = access_token.get('user_id')
         return User.objects.get(id=user_id)
     except (InvalidToken, TokenError, User.DoesNotExist):
         return AnonymousUser()
+
 
 
 class JWTAuthMiddleware(BaseMiddleware):
@@ -40,3 +40,4 @@ class JWTAuthMiddleware(BaseMiddleware):
 def JWTAuthMiddlewareStack(inner):
     """Convenience function to wrap ASGI application with JWT auth middleware."""
     return JWTAuthMiddleware(inner)
+

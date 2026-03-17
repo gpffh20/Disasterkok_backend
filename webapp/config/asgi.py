@@ -8,11 +8,17 @@ https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 """
 
 import os
+from pathlib import Path
+
+import dotenv
 
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
+dotenv.read_dotenv(
+    Path(__file__).resolve().parent.parent / '.env'
+)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
 
 django_asgi_app = get_asgi_application()
 

@@ -1,0 +1,15 @@
+# .env.production 작성 시 참고용 템플릿
+# 실제 .env.production 파일은 EC2에만 저장, Git에 절대 올리지 말 것
+
+SECRET_KEY=<python3 -c "import secrets; print(secrets.token_urlsafe(50)" 으로 생성>
+DEBUG=False
+ALLOWED_HOSTS=<EC2_PUBLIC_IP>
+
+POSTGRES_DB=disaster
+POSTGRES_USER=disaster_user
+POSTGRES_PASSWORD=<RDS 생성 시 설정한 비밀번호>
+POSTGRES_HOST=<RDS 엔드포인트 주소>
+POSTGRES_PORT=5432
+
+REDIS_HOST=<ElastiCache 기본 엔드포인트>
+REDIS_PORT=6379
