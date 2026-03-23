@@ -45,14 +45,13 @@ class PostListAPIView(ListAPIView):
                     post = serializer.save()
 
                     # 이미지 생성
-                    img_set = request.FILES.get('image', [])
-                    img_set = list(img_set) if img_set else []
+                    img_set = request.FILES.getlist('image')
 
                     for img in img_set:
                         PostImage.objects.create(post=post, image=img)
 
                     # 태그 생성
-                    tag_set = request.data.get('write_tags', [])
+                    tag_set = request.data.getlist('write_tags', [])
                     for tag in tag_set:
                         tag_instance, _ = Tag.objects.get_or_create(name=tag)
                         PostTag.objects.create(post=post, tag=tag_instance)
