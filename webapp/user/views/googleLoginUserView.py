@@ -42,8 +42,12 @@ def googleCallback(request):
         'grant_type': 'authorization_code',
     }
 
-    token_response = requests.post(url, data=data)
-    token_json = token_response.json()
+    try:
+        token_response = requests.post(url, data=data)
+        token_json = token_response.json()
+    except requests.RequestException:
+        return Response({"message": "구글 토큰 요청에 실패했습니다."}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
     access_token = token_json.get("access_token")
 
     if 'error' in token_json:
@@ -55,8 +59,11 @@ def googleCallback(request):
     if access_token:
         userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
         headers = {"Authorization": f"Bearer {access_token}"}
-        profile_response = requests.get(userinfo_url, headers=headers)
-        profile_json = profile_response.json()
+        try:
+            profile_response = requests.get(userinfo_url, headers=headers)
+            profile_json = profile_response.json()
+        except requests.RequestException:
+            return Response({"message": "구글 프로필 요청에 실패했습니다."}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
         googleId = profile_json.get("id")
         username = profile_json.get("email")
